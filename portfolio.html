@@ -19,14 +19,79 @@ background: -webkit-linear-gradient(90deg, #6E33CB, #EC329F);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   }
-.button.color.w-button {
-background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
+
+#portfolio-flters li {
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px 16px 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 3px 10px 3px;
+  transition: all 0.3s ease-in-out;
+  border-radius: 4px;
+  border: 1px solid #6e33cb;
 }
-.button.outlined.w-button {
-  border: 2px solid #6e33cb;
-  border-image: linear-gradient(to right, #6e33cb, #ec329f);
+ #portfolio-flters li:hover,
+ #portfolio-flters li.filter-active {
+  background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
 }
 </style>
+  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <script>
+    const select = (el, all = false) => {
+      el = el.trim()
+      if (all) {
+        return [...document.querySelectorAll(el)]
+      } else {
+        return document.querySelector(el)
+      }
+    }
+
+    const on = (type, el, listener, all = false) => {
+      let selectEl = select(el, all)
+
+      if (selectEl) {
+        if (all) {
+          selectEl.forEach(e => e.addEventListener(type, listener))
+        } else {
+          selectEl.addEventListener(type, listener)
+        }
+      }
+    }
+
+    window.addEventListener('load', () => {
+      let portfolioContainer = select('.portfolio-container');
+      console.log(portfolioContainer)
+      if (portfolioContainer) {
+        let portfolioIsotope = new Isotope(portfolioContainer, {
+          itemSelector: '.portfolio-item',
+          layoutMode: 'fitRows'
+        });
+        console.log(portfolioIsotope)
+
+        let portfolioFilters = select('#portfolio-flters li', true);
+
+        on('click', '#portfolio-flters li', function(e) {
+          console.log('clicked')
+
+          e.preventDefault();
+          portfolioFilters.forEach(function(el) {
+            el.classList.remove('filter-active');
+          });
+          this.classList.add('filter-active');
+
+          portfolioIsotope.arrange({
+            filter: this.getAttribute('data-filter')
+          });
+        }, true);
+      }
+
+    });
+  </script>
 </head>
 <body class="body">
   <div data-animation="over-right" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navbar glassmorphism w-nav">
@@ -112,13 +177,16 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
     </div>
   </div>
   <div id="mobile" class="section-portfolio-filters wf-section">
-    <a href="#" class="button color w-button">All</a>
-    <a href="#" class="button outlined w-button">Web</a>
-    <a href="#" class="button outlined w-button">Mobile</a>
-    <a href="#" class="button outlined w-button">Back End</a>
+    <ul id="portfolio-flters">
+      <li data-filter="*" class="filter-active">All</li>
+      <li data-filter=".filter-web-fe">Web</li>
+      <li data-filter=".filter-mobile">Mobile</li>
+      <li data-filter=".filter-web-be">Back End</li>
+    </ul>
   </div>
-  <div id="mobile" class="section-blogs wf-section">
-    <div class="case-study-div">
+
+  <div id="mobile" class="section-blogs wf-section portfolio-container">
+    <div class="portfolio-item case-study-div filter-web-fe">
       <a data-w-id="ab0fd69d-b28c-37db-b11d-0bcdd1abc8e9" href="#" class="case-study-item-div w-inline-block"><img src="images/MacBook-Pro-16-inch-Right-View-Mockup.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.328125px" srcset="images/MacBook-Pro-16-inch-Right-View-Mockup-p-500.png 500w, images/MacBook-Pro-16-inch-Right-View-Mockup-p-800.png 800w, images/MacBook-Pro-16-inch-Right-View-Mockup.png 1023w" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">Flawless - QA Tool FE</h2>
@@ -174,119 +242,7 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
-      <a data-w-id="6dc303ce-506e-0507-60aa-886430e0b590" href="#" class="case-study-item-div w-inline-block"><img src="images/Macbook-Pro-Mockup-15-inch.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 37vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.3359375px" srcset="images/Macbook-Pro-Mockup-15-inch-p-500.png 500w, images/Macbook-Pro-Mockup-15-inch.png 798w" alt="" class="portfolio-image">
-        <div class="div-block-5">
-          <h2 class="h2">Find Property - Property Management Platform</h2>
-          <div class="para">A property management platform developed using MERN Stack </div>
-          <div class="para mini">TypeScript / React / Material / AWS / Docker / Bitbucket Pipeline</div>
-        </div>
-        <div class="tools-div small-div"><img src="images/mobile-app-06.webp" loading="lazy" alt="" class="tools small"><img src="images/mobile-app-07.webp" loading="lazy" alt="" class="tools small"></div>
-      </a>
-      <div style="display:none;opacity:0.4" class="case-study-popup-container">
-        <div class="service-popup">
-          <div class="header-popup">
-            <div class="spaced-in-between">
-              <h2 class="popup-title">Find Property - Property Management Platform</h2><img src="images/Close.svg" loading="lazy" data-w-id="6dc303ce-506e-0507-60aa-886430e0b5a4" alt="" class="close-popup">
-            </div>
-          </div>
-          <div class="content-popup-cs">
-            <div id="Screenshots" class="content-div-cs">
-              <div class="popup-content-and-image">
-                <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
-                  <div class="w-slider-mask">
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-01.png 500w, images/Find-Property-01.png 800w, images/Find-Property-01.png 1080w, images/Find-Property-01.png 1600w, images/Find-Property-01.png 2000w" src="images/Find-Property-01.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-05.png 500w, images/Find-Property-05.png 800w, images/Find-Property-05.png 1080w, images/Find-Property-05.png 1600w, images/Find-Property-05.png 2000w" src="images/Find-Property-05.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-03.png 500w, images/Find-Property-03.png 800w, images/Find-Property-03.png 1080w, images/Find-Property-03.png 1600w, images/Find-Property-03.png 2000w" src="images/Find-Property-03.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-04.png 500w, images/Find-Property-04.png 800w, images/Find-Property-04.png 1080w, images/Find-Property-04.png 1600w, images/Find-Property-04.png 2000w" src="images/Find-Property-04.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-02.png 500w, images/Find-Property-02.png 800w, images/Find-Property-02.png 1080w, images/Find-Property-02.png 1600w, images/Find-Property-02.png 2000w" src="images/Find-Property-02.png" loading="lazy" alt="" class="slider-image"></div>
-                  </div>
-                  <div class="left-arrow w-slider-arrow-left">
-                    <div class="w-icon-slider-left"></div>
-                  </div>
-                  <div class="right-arrow w-slider-arrow-right">
-                    <div class="w-icon-slider-right"></div>
-                  </div>
-                  <div class="slide-nav w-slider-nav w-round"></div>
-                </div>
-                <div id="Techiniques" class="content-div-cs">
-                  <div class="rte-portfolio w-richtext">
-                    <h5><strong>Category:</strong> Web Development (Front-end)</h5>
-                    <h5><strong>Client:</strong> An Ireland Client (Freelance Project )</h5>
-                    <h5><strong>Project date: </strong>01 March, 2020</h5>
-                    <h5><strong>Role:</strong> Freelance Software Engineer</h5>
-                    <p><strong>Responsibilities &amp; Achievements</strong></p>
-                    <ul role="list">
-                      <li>Developed a MERN stack web application that is a property management platform that has been done with an Ireland client.</li>
-                      <li>Developed all front-end, back-end, DevOps, and Testing and communicated directly with the clients and UI designers.</li>
-                      <li>Utilized the concepts of the overall workflow before implementing the application.</li>
-                    </ul>
-                  </div>
-                  <div class="tools-div on-popup"><img src="images/10b88c68-typescript-logo.png" loading="lazy" sizes="100vw" srcset="images/10b88c68-typescript-logo-p-500.png 500w, images/10b88c68-typescript-logo-p-800.png 800w, images/10b88c68-typescript-logo-p-1080.png 1080w, images/10b88c68-typescript-logo.png 1240w" alt="" class="tools on-popup"><img src="images/mobile-app-05.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-08.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-07.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-06.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/icons8-github-64.png" loading="lazy" alt="" class="tools on-popup"></div>
-<!--                  <a href="#" class="view-project">view Project link</a>-->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="case-study-div">
-      <a data-w-id="0a5f5a59-e0eb-f57f-8ead-5819c46fd2e1" href="#" class="case-study-item-div w-inline-block"><img src="images/MacBook-Pro-16-inch-Right-View-Mockup-1.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.3359375px" srcset="images/MacBook-Pro-16-inch-Right-View-Mockup-1-p-500.png 500w, images/MacBook-Pro-16-inch-Right-View-Mockup-1-p-800.png 800w, images/MacBook-Pro-16-inch-Right-View-Mockup-1.png 1023w" alt="" class="portfolio-image">
-        <div class="div-block-5">
-          <h2 class="h2">Insights Pro</h2>
-          <div class="para">An insight generation platform developed using MEAN Stack</div>
-          <div class="para mini">JavaScript/ Angular/ Sass/ DigitalOcean/ Docker/ Bitbucket Pipeline</div>
-        </div>
-        <div class="tools-div small-div"><img src="images/mobile-app-06.webp" loading="lazy" alt="" class="tools small"><img src="images/mobile-app-07.webp" loading="lazy" alt="" class="tools small"></div>
-      </a>
-      <div style="display:none;opacity:0.4" class="case-study-popup-container">
-        <div class="service-popup">
-          <div class="header-popup">
-            <div class="spaced-in-between">
-              <h2 class="popup-title">Insights Pro</h2><img src="images/Close.svg" loading="lazy" data-w-id="0a5f5a59-e0eb-f57f-8ead-5819c46fd2f5" alt="" class="close-popup">
-            </div>
-          </div>
-          <div class="content-popup-cs">
-            <div id="Screenshots" class="content-div-cs">
-              <div class="popup-content-and-image">
-                <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
-                  <div class="w-slider-mask">
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Insights-Pro-02.png 500w, images/Insights-Pro-02.png 800w, images/Insights-Pro-02.png 1080w, images/Insights-Pro-02.png 1600w" src="images/Insights-Pro-02.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Insights-Pro-03.png 500w, images/Insights-Pro-03.png 800w, images/Insights-Pro-03.png 1080w, images/Insights-Pro-03.png 1600w" src="images/Insights-Pro-03.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Insights-Pro-04.png 500w, images/Insights-Pro-04.png 800w, images/Insights-Pro-04.png 1080w, images/Insights-Pro-04.png 1600w" src="images/Insights-Pro-04.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Insights-Pro-01.png 500w, images/Insights-Pro-01.png 800w, images/Insights-Pro-01.png 1080w, images/Insights-Pro-01.png 1600w" src="images/Insights-Pro-01.png" loading="lazy" alt="" class="slider-image"></div>
-                  </div>
-                  <div class="left-arrow w-slider-arrow-left">
-                    <div class="w-icon-slider-left"></div>
-                  </div>
-                  <div class="right-arrow w-slider-arrow-right">
-                    <div class="w-icon-slider-right"></div>
-                  </div>
-                  <div class="slide-nav w-slider-nav w-round"></div>
-                </div>
-                <div id="Techiniques" class="content-div-cs">
-                  <div class="rte-portfolio w-richtext">
-                    <h5><strong>Category:</strong> Web Development (Front-end)</h5>
-                    <h5><strong>Client:</strong> Internal Product (While at Zeptolytics)</h5>
-                    <h5><strong>Role:</strong> Associate Software Engineer</h5>
-                    <p><strong>Responsibilities &amp; Achievements</strong></p>
-                    <ul role="list">
-                      <li>Solely developed and launched the web application</li>
-                      <li>Integration of Hotjar and Google Analytics</li>
-                      <li>Integration of Demo user registration, JWT token authorization, socket connection integration, and file drag-and-drop features</li>
-                    </ul>
-                  </div>
-                  <div class="tools-div on-popup"><img src="images/javascript.png" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-09.webp" loading="lazy" sizes="100vw" srcset="images/Web-app-Dev-09-p-500.png 500w, images/Web-app-Dev-09.webp 555w" alt="" class="tools on-popup"><img src="images/20_55_23.714y33gof_DO_Logo-Blue.png" loading="lazy" sizes="100vw" srcset="images/20_55_23.714y33gof_DO_Logo-Blue-p-500.png 500w, images/20_55_23.714y33gof_DO_Logo-Blue-p-800.png 800w, images/20_55_23.714y33gof_DO_Logo-Blue-p-1080.png 1080w, images/20_55_23.714y33gof_DO_Logo-Blue.png 1917w" alt="" class="tools on-popup"><img src="images/download.png" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-06.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/0_JiFsjZ9E5CpIgiz5.png" loading="lazy" sizes="100vw" srcset="images/0_JiFsjZ9E5CpIgiz5-p-500.png 500w, images/0_JiFsjZ9E5CpIgiz5-p-800.png 800w, images/0_JiFsjZ9E5CpIgiz5-p-1080.png 1080w, images/0_JiFsjZ9E5CpIgiz5.png 1157w" alt="" class="tools on-popup"></div>
-<!--                  <a href="https://insightspro.zeptolytics.com" class="view-project">view Project link</a>-->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="case-study-div">
+    <div class="portfolio-item case-study-div filter-web-fe">
       <a data-w-id="53086e07-3b39-8d3d-e598-9e93f2603704" href="#" class="case-study-item-div w-inline-block"><img src="images/lending.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 37vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.328125px" srcset="images/lending-p-500.png 500w, images/lending-p-800.png 800w, images/lending.png 1023w" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">LOLC Lending Module</h2>
@@ -344,7 +300,233 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
+    <div class="portfolio-item case-study-div filter-web-fe">
+      <a data-w-id="0cf75faf-a32a-bbea-223b-e59b970f0aab" href="#" class="case-study-item-div w-inline-block"><img src="images/collateral.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.328125px" srcset="images/collateral-p-500.png 500w, images/collateral-p-800.png 800w, images/collateral.png 1023w" alt="" class="portfolio-image">
+        <div class="div-block-5">
+          <h2 class="h2">LOLC Collateral Module</h2>
+          <div class="para">A Collateral Management System developed using React and Java</div>
+          <div class="para mini">TypeScript / React / Ant Design / Jenkins</div>
+        </div>
+        <div class="tools-div small-div"><img src="images/mobile-app-06.webp" loading="lazy" alt="" class="tools small"><img src="images/mobile-app-07.webp" loading="lazy" alt="" class="tools small"></div>
+      </a>
+      <div style="display:none;opacity:0.4" class="case-study-popup-container">
+        <div class="service-popup">
+          <div class="header-popup">
+            <div class="spaced-in-between">
+              <h2 class="popup-title">LOLC Collateral Module</h2><img src="images/Close.svg" loading="lazy" data-w-id="0cf75faf-a32a-bbea-223b-e59b970f0abf" alt="" class="close-popup">
+            </div>
+          </div>
+          <div class="content-popup-cs">
+            <div id="Screenshots" class="content-div-cs">
+              <div class="popup-content-and-image">
+                <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
+                  <div class="w-slider-mask">
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-06.png 500w, images/LOLC-Lending-06.png 800w, images/LOLC-Lending-06.png 1080w, images/LOLC-Lending-06.png 1600w" src="images/LOLC-Lending-06.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-01.png 500w, images/LOLC-Lending-01.png 800w, images/LOLC-Lending-01.png 1080w, images/LOLC-Lending-01.png 1600w" src="images/LOLC-Lending-01.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-04.png 500w, images/LOLC-Lending-04.png 800w, images/LOLC-Lending-04.png 1080w, images/LOLC-Lending-04.png 1600w" src="images/LOLC-Lending-04.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-02.png 500w, images/LOLC-Lending-02.png 800w, images/LOLC-Lending-02.png 1080w, images/LOLC-Lending-02.png 1600w" src="images/LOLC-Lending-02.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-05.png 500w, images/LOLC-Lending-05.png 800w, images/LOLC-Lending-05.png 1080w, images/LOLC-Lending-05.png 1600w" src="images/LOLC-Lending-05.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-07.png 500w, images/LOLC-Lending-07.png 800w, images/LOLC-Lending-07.png 1080w, images/LOLC-Lending-07.png 1600w" src="images/LOLC-Lending-07.png" loading="lazy" alt="" class="slider-image"></div>
+                  </div>
+                  <div class="left-arrow w-slider-arrow-left">
+                    <div class="w-icon-slider-left"></div>
+                  </div>
+                  <div class="right-arrow w-slider-arrow-right">
+                    <div class="w-icon-slider-right"></div>
+                  </div>
+                  <div class="slide-nav w-slider-nav w-round"></div>
+                </div>
+                <div id="Techiniques" class="content-div-cs">
+                  <div class="rte-portfolio w-richtext">
+                    <h5><strong>Category:</strong> Web Development (Front-end)</h5>
+                    <h5><strong>Client:</strong> LOLC (While at CabbageApps)</h5>
+                    <h5><strong>Role:</strong> Software Engineer / Team Lead</h5>
+                    <p><strong>Responsibilities &amp; Achievements</strong></p>
+                    <ul role="list">
+                      <li>Worked as a Front-end Team Lead with 3 other team members</li>
+                      <li>Research and development of Core banking modules</li>
+                      <li>Code review and maintain clean architecture</li>
+                    </ul>
+                  </div>
+                  <div class="tools-div on-popup"><img src="images/typescript.svg" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-10.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-01.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-05.webp" loading="lazy" alt="" class="tools on-popup"></div>
+                  <!--                  <a href="#" class="view-project">view Project link</a>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item case-study-div filter-web-be">
+      <a data-w-id="80bf90f7-3359-328a-4159-be6b0535a7da" href="#" class="case-study-item-div w-inline-block"><img src="images/tribz-be.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.328125px" srcset="images/tribz-be-p-500.png 500w, images/tribz-be.png 513w" alt="" class="portfolio-image">
+        <div class="div-block-5">
+          <h2 class="h2">Tribz - Influencer Marketing Platform</h2>
+          <div class="para">A Social Media Marketing Platform for Influencers, developed using MERN Stack</div>
+          <div class="para mini">TypeScript / NestJS / MongoDB / Pusher / PostgreSQL / Jenkins / PM2 / Google Cloud</div>
+        </div>
+        <div class="tools-div small-div"><img src="images/mobile-app-06.webp" loading="lazy" alt="" class="tools small"><img src="images/mobile-app-07.webp" loading="lazy" alt="" class="tools small"></div>
+      </a>
+      <div style="display:none;opacity:0.4" class="case-study-popup-container">
+        <div class="service-popup">
+          <div class="header-popup">
+            <div class="spaced-in-between">
+              <h2 class="popup-title">Tribz - Influencer Marketing Platform</h2><img src="images/Close.svg" loading="lazy" data-w-id="80bf90f7-3359-328a-4159-be6b0535a7ee" alt="" class="close-popup">
+            </div>
+          </div>
+          <div class="content-popup-cs">
+            <div id="Screenshots" class="content-div-cs">
+              <div class="popup-content-and-image">
+                <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
+                  <div class="w-slider-mask">
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-03.png 500w, images/TRIBZ-03.png 800w, images/TRIBZ-03.png 1080w, images/TRIBZ-03.png 1600w" src="images/TRIBZ-03.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-01.png 500w, images/TRIBZ-01.png 800w, images/TRIBZ-01.png 1080w, images/TRIBZ-01.png 1600w" src="images/TRIBZ-01.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-02.png 500w, images/TRIBZ-02.png 800w, images/TRIBZ-02.png 1080w, images/TRIBZ-02.png 1600w" src="images/TRIBZ-02.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-05.png 500w, images/TRIBZ-05.png 800w, images/TRIBZ-05.png 1080w, images/TRIBZ-05.png 1600w" src="images/TRIBZ-05.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-04.png 500w, images/TRIBZ-04.png 800w, images/TRIBZ-04.png 1080w, images/TRIBZ-04.png 1600w, images/TRIBZ-04.png 2000w" src="images/TRIBZ-04.png" loading="lazy" alt="" class="slider-image"></div>
+                  </div>
+                  <div class="left-arrow w-slider-arrow-left">
+                    <div class="w-icon-slider-left"></div>
+                  </div>
+                  <div class="right-arrow w-slider-arrow-right">
+                    <div class="w-icon-slider-right"></div>
+                  </div>
+                  <div class="slide-nav w-slider-nav w-round"></div>
+                </div>
+                <div id="Techiniques" class="content-div-cs">
+                  <div class="rte-portfolio w-richtext">
+                    <h5><strong>Category:</strong> Web Development (Back-end)</h5>
+                    <h5><strong>Client:</strong> Tribz (While at CabbageApps)</h5>
+                    <h5><strong>Role:</strong> Software Engineer / Team Lead / Product Owner</h5>
+                    <p><strong>Responsibilities &amp; Achievements</strong></p>
+                    <ul role="list">
+                      <li>Worked as the lead back-end developer with 2 other team members</li>
+                      <li>Research and development in Data Aggregation Layer</li>
+                      <li>Research and development of NestJs Security modules</li>
+                      <li>Research and development in Facebook API, Google API, and TikTok API</li>
+                    </ul>
+                  </div>
+                  <div class="tools-div on-popup"><img src="images/typescript.svg" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-12.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Group-410.png" loading="lazy" sizes="100vw" srcset="images/Group-410-p-500.png 500w, images/Group-410-p-800.png 800w, images/Group-410-p-1080.png 1080w, images/Group-410-p-1600.png 1600w, images/Group-410-p-2000.png 2000w, images/Group-410.png 2560w" alt="" class="tools on-popup"><img src="images/b2f57c88-dea2-4bd6-8310-58af85a9c2c2.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/pngwing.com.png" loading="lazy" sizes="100vw" srcset="images/pngwing.com-p-500.png 500w, images/pngwing.com-p-800.png 800w, images/pngwing.com-p-1080.png 1080w, images/pngwing.com-p-1600.png 1600w, images/pngwing.com-p-2000.png 2000w, images/pngwing.com-p-2600.png 2600w, images/pngwing.com.png 3000w" alt="" class="tools on-popup"><img src="images/Web-app-Dev-05.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/1_PXPRvzEipmCU-FsR7OjC2w.png" loading="lazy" sizes="100vw" srcset="images/1_PXPRvzEipmCU-FsR7OjC2w-p-500.png 500w, images/1_PXPRvzEipmCU-FsR7OjC2w.png 734w" alt="" class="tools on-popup"><img src="images/02yVL9f8Jw1atwoG6sgFZDH-7.webp" loading="lazy" sizes="100vw" srcset="images/02yVL9f8Jw1atwoG6sgFZDH-7-p-500.webp 500w, images/02yVL9f8Jw1atwoG6sgFZDH-7-p-800.webp 800w, images/02yVL9f8Jw1atwoG6sgFZDH-7.webp 810w" alt="" class="tools on-popup"><img src="images/Screenshot-2023-01-22-at-2.46.02-PM.png" loading="lazy" sizes="100vw" srcset="images/Screenshot-2023-01-22-at-2.46.02-PM-p-500.png 500w, images/Screenshot-2023-01-22-at-2.46.02-PM.png 530w" alt="" class="tools on-popup"><img src="images/youtube-facebook.webp" loading="lazy" sizes="100vw" srcset="images/youtube-facebook-p-500.webp 500w, images/youtube-facebook-p-800.webp 800w, images/youtube-facebook-p-1080.webp 1080w, images/youtube-facebook-p-1600.webp 1600w, images/youtube-facebook.webp 1700w" alt="" class="tools on-popup"></div>
+                  <a href="https://tribz.com" target="_blank" class="view-project">view Project link</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item case-study-div filter-web-fe">
+      <a data-w-id="6dc303ce-506e-0507-60aa-886430e0b590" href="#" class="case-study-item-div w-inline-block"><img src="images/Macbook-Pro-Mockup-15-inch.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 37vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.3359375px" srcset="images/Macbook-Pro-Mockup-15-inch-p-500.png 500w, images/Macbook-Pro-Mockup-15-inch.png 798w" alt="" class="portfolio-image">
+        <div class="div-block-5">
+          <h2 class="h2">Find Property - Property Management Platform</h2>
+          <div class="para">A property management platform developed using MERN Stack </div>
+          <div class="para mini">TypeScript / React / Material / AWS / Docker / Bitbucket Pipeline</div>
+        </div>
+        <div class="tools-div small-div"><img src="images/mobile-app-06.webp" loading="lazy" alt="" class="tools small"><img src="images/mobile-app-07.webp" loading="lazy" alt="" class="tools small"></div>
+      </a>
+      <div style="display:none;opacity:0.4" class="case-study-popup-container">
+        <div class="service-popup">
+          <div class="header-popup">
+            <div class="spaced-in-between">
+              <h2 class="popup-title">Find Property - Property Management Platform</h2><img src="images/Close.svg" loading="lazy" data-w-id="6dc303ce-506e-0507-60aa-886430e0b5a4" alt="" class="close-popup">
+            </div>
+          </div>
+          <div class="content-popup-cs">
+            <div id="Screenshots" class="content-div-cs">
+              <div class="popup-content-and-image">
+                <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
+                  <div class="w-slider-mask">
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-01.png 500w, images/Find-Property-01.png 800w, images/Find-Property-01.png 1080w, images/Find-Property-01.png 1600w, images/Find-Property-01.png 2000w" src="images/Find-Property-01.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-05.png 500w, images/Find-Property-05.png 800w, images/Find-Property-05.png 1080w, images/Find-Property-05.png 1600w, images/Find-Property-05.png 2000w" src="images/Find-Property-05.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-03.png 500w, images/Find-Property-03.png 800w, images/Find-Property-03.png 1080w, images/Find-Property-03.png 1600w, images/Find-Property-03.png 2000w" src="images/Find-Property-03.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-04.png 500w, images/Find-Property-04.png 800w, images/Find-Property-04.png 1080w, images/Find-Property-04.png 1600w, images/Find-Property-04.png 2000w" src="images/Find-Property-04.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Find-Property-02.png 500w, images/Find-Property-02.png 800w, images/Find-Property-02.png 1080w, images/Find-Property-02.png 1600w, images/Find-Property-02.png 2000w" src="images/Find-Property-02.png" loading="lazy" alt="" class="slider-image"></div>
+                  </div>
+                  <div class="left-arrow w-slider-arrow-left">
+                    <div class="w-icon-slider-left"></div>
+                  </div>
+                  <div class="right-arrow w-slider-arrow-right">
+                    <div class="w-icon-slider-right"></div>
+                  </div>
+                  <div class="slide-nav w-slider-nav w-round"></div>
+                </div>
+                <div id="Techiniques" class="content-div-cs">
+                  <div class="rte-portfolio w-richtext">
+                    <h5><strong>Category:</strong> Web Development (Front-end)</h5>
+                    <h5><strong>Client:</strong> An Ireland Client (Freelance Project )</h5>
+                    <h5><strong>Project date: </strong>01 March, 2020</h5>
+                    <h5><strong>Role:</strong> Freelance Software Engineer</h5>
+                    <p><strong>Responsibilities &amp; Achievements</strong></p>
+                    <ul role="list">
+                      <li>Developed a MERN stack web application that is a property management platform that has been done with an Ireland client.</li>
+                      <li>Developed all front-end, back-end, DevOps, and Testing and communicated directly with the clients and UI designers.</li>
+                      <li>Utilized the concepts of the overall workflow before implementing the application.</li>
+                    </ul>
+                  </div>
+                  <div class="tools-div on-popup"><img src="images/10b88c68-typescript-logo.png" loading="lazy" sizes="100vw" srcset="images/10b88c68-typescript-logo-p-500.png 500w, images/10b88c68-typescript-logo-p-800.png 800w, images/10b88c68-typescript-logo-p-1080.png 1080w, images/10b88c68-typescript-logo.png 1240w" alt="" class="tools on-popup"><img src="images/mobile-app-05.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-08.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-07.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-06.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/icons8-github-64.png" loading="lazy" alt="" class="tools on-popup"></div>
+                  <!--                  <a href="#" class="view-project">view Project link</a>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item case-study-div filter-web-fe">
+      <a data-w-id="0a5f5a59-e0eb-f57f-8ead-5819c46fd2e1" href="#" class="case-study-item-div w-inline-block"><img src="images/MacBook-Pro-16-inch-Right-View-Mockup-1.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.3359375px" srcset="images/MacBook-Pro-16-inch-Right-View-Mockup-1-p-500.png 500w, images/MacBook-Pro-16-inch-Right-View-Mockup-1-p-800.png 800w, images/MacBook-Pro-16-inch-Right-View-Mockup-1.png 1023w" alt="" class="portfolio-image">
+        <div class="div-block-5">
+          <h2 class="h2">Insights Pro</h2>
+          <div class="para">An insight generation platform developed using MEAN Stack</div>
+          <div class="para mini">JavaScript/ Angular/ Sass/ DigitalOcean/ Docker/ Bitbucket Pipeline</div>
+        </div>
+        <div class="tools-div small-div"><img src="images/mobile-app-06.webp" loading="lazy" alt="" class="tools small"><img src="images/mobile-app-07.webp" loading="lazy" alt="" class="tools small"></div>
+      </a>
+      <div style="display:none;opacity:0.4" class="case-study-popup-container">
+        <div class="service-popup">
+          <div class="header-popup">
+            <div class="spaced-in-between">
+              <h2 class="popup-title">Insights Pro</h2><img src="images/Close.svg" loading="lazy" data-w-id="0a5f5a59-e0eb-f57f-8ead-5819c46fd2f5" alt="" class="close-popup">
+            </div>
+          </div>
+          <div class="content-popup-cs">
+            <div id="Screenshots" class="content-div-cs">
+              <div class="popup-content-and-image">
+                <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
+                  <div class="w-slider-mask">
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Insights-Pro-02.png 500w, images/Insights-Pro-02.png 800w, images/Insights-Pro-02.png 1080w, images/Insights-Pro-02.png 1600w" src="images/Insights-Pro-02.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Insights-Pro-03.png 500w, images/Insights-Pro-03.png 800w, images/Insights-Pro-03.png 1080w, images/Insights-Pro-03.png 1600w" src="images/Insights-Pro-03.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Insights-Pro-04.png 500w, images/Insights-Pro-04.png 800w, images/Insights-Pro-04.png 1080w, images/Insights-Pro-04.png 1600w" src="images/Insights-Pro-04.png" loading="lazy" alt="" class="slider-image"></div>
+                    <div class="slide w-slide"><img sizes="100vw" srcset="images/Insights-Pro-01.png 500w, images/Insights-Pro-01.png 800w, images/Insights-Pro-01.png 1080w, images/Insights-Pro-01.png 1600w" src="images/Insights-Pro-01.png" loading="lazy" alt="" class="slider-image"></div>
+                  </div>
+                  <div class="left-arrow w-slider-arrow-left">
+                    <div class="w-icon-slider-left"></div>
+                  </div>
+                  <div class="right-arrow w-slider-arrow-right">
+                    <div class="w-icon-slider-right"></div>
+                  </div>
+                  <div class="slide-nav w-slider-nav w-round"></div>
+                </div>
+                <div id="Techiniques" class="content-div-cs">
+                  <div class="rte-portfolio w-richtext">
+                    <h5><strong>Category:</strong> Web Development (Front-end)</h5>
+                    <h5><strong>Client:</strong> Internal Product (While at Zeptolytics)</h5>
+                    <h5><strong>Role:</strong> Associate Software Engineer</h5>
+                    <p><strong>Responsibilities &amp; Achievements</strong></p>
+                    <ul role="list">
+                      <li>Solely developed and launched the web application</li>
+                      <li>Integration of Hotjar and Google Analytics</li>
+                      <li>Integration of Demo user registration, JWT token authorization, socket connection integration, and file drag-and-drop features</li>
+                    </ul>
+                  </div>
+                  <div class="tools-div on-popup"><img src="images/javascript.png" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-09.webp" loading="lazy" sizes="100vw" srcset="images/Web-app-Dev-09-p-500.png 500w, images/Web-app-Dev-09.webp 555w" alt="" class="tools on-popup"><img src="images/20_55_23.714y33gof_DO_Logo-Blue.png" loading="lazy" sizes="100vw" srcset="images/20_55_23.714y33gof_DO_Logo-Blue-p-500.png 500w, images/20_55_23.714y33gof_DO_Logo-Blue-p-800.png 800w, images/20_55_23.714y33gof_DO_Logo-Blue-p-1080.png 1080w, images/20_55_23.714y33gof_DO_Logo-Blue.png 1917w" alt="" class="tools on-popup"><img src="images/download.png" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-06.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/0_JiFsjZ9E5CpIgiz5.png" loading="lazy" sizes="100vw" srcset="images/0_JiFsjZ9E5CpIgiz5-p-500.png 500w, images/0_JiFsjZ9E5CpIgiz5-p-800.png 800w, images/0_JiFsjZ9E5CpIgiz5-p-1080.png 1080w, images/0_JiFsjZ9E5CpIgiz5.png 1157w" alt="" class="tools on-popup"></div>
+                  <!--                  <a href="https://insightspro.zeptolytics.com" class="view-project">view Project link</a>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item case-study-div filter-web-fe">
       <a data-w-id="5aef6f49-b447-0fb8-c7c5-0228d235cca9" href="#" class="case-study-item-div w-inline-block"><img src="images/zmart.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.3359375px" srcset="images/zmart-p-500.png 500w, images/zmart-p-800.png 800w, images/zmart.png 1023w" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">ZmartManager</h2>
@@ -399,7 +581,7 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
+    <div class="portfolio-item case-study-div filter-web-be">
       <a data-w-id="26d2bf2b-18c6-2d20-18d2-9929d549c1d2" href="#" class="case-study-item-div w-inline-block"><img src="images/qa-tool-be.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 37vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.3359375px" srcset="images/qa-tool-be-p-500.png 500w, images/qa-tool-be-p-800.png 800w, images/qa-tool-be.png 979w" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">Flawless - QA Tool BE</h2>
@@ -460,64 +642,7 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
-      <a data-w-id="80bf90f7-3359-328a-4159-be6b0535a7da" href="#" class="case-study-item-div w-inline-block"><img src="images/tribz-be.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.328125px" srcset="images/tribz-be-p-500.png 500w, images/tribz-be.png 513w" alt="" class="portfolio-image">
-        <div class="div-block-5">
-          <h2 class="h2">Tribz - Influencer Marketing Platform</h2>
-          <div class="para">A Social Media Marketing Platform for Influencers, developed using MERN Stack</div>
-          <div class="para mini">TypeScript / NestJS / MongoDB / Pusher / PostgreSQL / Jenkins / PM2 / Google Cloud</div>
-        </div>
-        <div class="tools-div small-div"><img src="images/mobile-app-06.webp" loading="lazy" alt="" class="tools small"><img src="images/mobile-app-07.webp" loading="lazy" alt="" class="tools small"></div>
-      </a>
-      <div style="display:none;opacity:0.4" class="case-study-popup-container">
-        <div class="service-popup">
-          <div class="header-popup">
-            <div class="spaced-in-between">
-              <h2 class="popup-title">Tribz - Influencer Marketing Platform</h2><img src="images/Close.svg" loading="lazy" data-w-id="80bf90f7-3359-328a-4159-be6b0535a7ee" alt="" class="close-popup">
-            </div>
-          </div>
-          <div class="content-popup-cs">
-            <div id="Screenshots" class="content-div-cs">
-              <div class="popup-content-and-image">
-                <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
-                  <div class="w-slider-mask">
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-03.png 500w, images/TRIBZ-03.png 800w, images/TRIBZ-03.png 1080w, images/TRIBZ-03.png 1600w" src="images/TRIBZ-03.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-01.png 500w, images/TRIBZ-01.png 800w, images/TRIBZ-01.png 1080w, images/TRIBZ-01.png 1600w" src="images/TRIBZ-01.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-02.png 500w, images/TRIBZ-02.png 800w, images/TRIBZ-02.png 1080w, images/TRIBZ-02.png 1600w" src="images/TRIBZ-02.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-05.png 500w, images/TRIBZ-05.png 800w, images/TRIBZ-05.png 1080w, images/TRIBZ-05.png 1600w" src="images/TRIBZ-05.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/TRIBZ-04.png 500w, images/TRIBZ-04.png 800w, images/TRIBZ-04.png 1080w, images/TRIBZ-04.png 1600w, images/TRIBZ-04.png 2000w" src="images/TRIBZ-04.png" loading="lazy" alt="" class="slider-image"></div>
-                  </div>
-                  <div class="left-arrow w-slider-arrow-left">
-                    <div class="w-icon-slider-left"></div>
-                  </div>
-                  <div class="right-arrow w-slider-arrow-right">
-                    <div class="w-icon-slider-right"></div>
-                  </div>
-                  <div class="slide-nav w-slider-nav w-round"></div>
-                </div>
-                <div id="Techiniques" class="content-div-cs">
-                  <div class="rte-portfolio w-richtext">
-                    <h5><strong>Category:</strong> Web Development (Back-end)</h5>
-                    <h5><strong>Client:</strong> Tribz (While at CabbageApps)</h5>
-                    <h5><strong>Role:</strong> Software Engineer / Team Lead / Product Owner</h5>
-                    <p><strong>Responsibilities &amp; Achievements</strong></p>
-                    <ul role="list">
-                      <li>Worked as the lead back-end developer with 2 other team members</li>
-                      <li>Research and development in Data Aggregation Layer</li>
-                      <li>Research and development of NestJs Security modules</li>
-                      <li>Research and development in Facebook API, Google API, and TikTok API</li>
-                    </ul>
-                  </div>
-                  <div class="tools-div on-popup"><img src="images/typescript.svg" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-12.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Group-410.png" loading="lazy" sizes="100vw" srcset="images/Group-410-p-500.png 500w, images/Group-410-p-800.png 800w, images/Group-410-p-1080.png 1080w, images/Group-410-p-1600.png 1600w, images/Group-410-p-2000.png 2000w, images/Group-410.png 2560w" alt="" class="tools on-popup"><img src="images/b2f57c88-dea2-4bd6-8310-58af85a9c2c2.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/pngwing.com.png" loading="lazy" sizes="100vw" srcset="images/pngwing.com-p-500.png 500w, images/pngwing.com-p-800.png 800w, images/pngwing.com-p-1080.png 1080w, images/pngwing.com-p-1600.png 1600w, images/pngwing.com-p-2000.png 2000w, images/pngwing.com-p-2600.png 2600w, images/pngwing.com.png 3000w" alt="" class="tools on-popup"><img src="images/Web-app-Dev-05.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/1_PXPRvzEipmCU-FsR7OjC2w.png" loading="lazy" sizes="100vw" srcset="images/1_PXPRvzEipmCU-FsR7OjC2w-p-500.png 500w, images/1_PXPRvzEipmCU-FsR7OjC2w.png 734w" alt="" class="tools on-popup"><img src="images/02yVL9f8Jw1atwoG6sgFZDH-7.webp" loading="lazy" sizes="100vw" srcset="images/02yVL9f8Jw1atwoG6sgFZDH-7-p-500.webp 500w, images/02yVL9f8Jw1atwoG6sgFZDH-7-p-800.webp 800w, images/02yVL9f8Jw1atwoG6sgFZDH-7.webp 810w" alt="" class="tools on-popup"><img src="images/Screenshot-2023-01-22-at-2.46.02-PM.png" loading="lazy" sizes="100vw" srcset="images/Screenshot-2023-01-22-at-2.46.02-PM-p-500.png 500w, images/Screenshot-2023-01-22-at-2.46.02-PM.png 530w" alt="" class="tools on-popup"><img src="images/youtube-facebook.webp" loading="lazy" sizes="100vw" srcset="images/youtube-facebook-p-500.webp 500w, images/youtube-facebook-p-800.webp 800w, images/youtube-facebook-p-1080.webp 1080w, images/youtube-facebook-p-1600.webp 1600w, images/youtube-facebook.webp 1700w" alt="" class="tools on-popup"></div>
-                  <a href="https://tribz.com" target="_blank" class="view-project">view Project link</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="case-study-div">
+    <div class="portfolio-item case-study-div filter-web-be">
       <a data-w-id="7b194b58-5e44-3920-f618-1b8519f7670c" href="#" class="case-study-item-div w-inline-block"><img src="images/ceylinco-be.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 37vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.3359375px" srcset="images/ceylinco-be-p-500.png 500w, images/ceylinco-be-p-800.png 800w, images/ceylinco-be.png 979w" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">Ceylinco Virtual Assessor</h2>
@@ -571,7 +696,7 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
+    <div class="portfolio-item case-study-div filter-mobile">
       <a data-w-id="4d202a12-b62e-16be-470d-7beb9c5f0469" href="#" class="case-study-item-div w-inline-block"><img src="images/wycherly.png" loading="lazy" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">My Wycherley - Student Management System</h2>
@@ -626,7 +751,7 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
+    <div class="portfolio-item case-study-div filter-mobile">
       <a data-w-id="a8ca0b37-bcdd-1c1a-0d32-d6f6bbc55d35" href="#" class="case-study-item-div w-inline-block"><img src="images/bsp.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 37vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.328125px" srcset="images/bsp-p-500.png 500w, images/bsp-p-800.png 800w, images/bsp.png 1023w" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">BSP Pronos - Betting App</h2>
@@ -679,7 +804,7 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
+    <div class="portfolio-item case-study-div filter-mobile">
       <a data-w-id="e3ca3613-6205-2fdb-0a49-c32b08461bbe" href="#" class="case-study-item-div w-inline-block"><img src="images/iPhone-14-Pro-Space-Black-Mockup.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.3359375px" srcset="images/iPhone-14-Pro-Space-Black-Mockup-p-500.png 500w, images/iPhone-14-Pro-Space-Black-Mockup.png 505w" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">Shapes - Quiz App</h2>
@@ -737,7 +862,7 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
+    <div class="portfolio-item case-study-div filter-mobile">
       <a data-w-id="3277c583-515e-c904-43e9-e7bcf6cfc2e7" href="#" class="case-study-item-div w-inline-block"><img src="images/boondi.png" loading="lazy" alt="" class="portfolio-image">
         <div class="div-block-5">
           <h2 class="h2">Boondi - Dating App</h2>
@@ -795,63 +920,7 @@ background: -webkit-linear-gradient(45deg, #6E33CB, #EC329F);
         </div>
       </div>
     </div>
-    <div class="case-study-div">
-      <a data-w-id="0cf75faf-a32a-bbea-223b-e59b970f0aab" href="#" class="case-study-item-div w-inline-block"><img src="images/collateral.png" loading="lazy" sizes="(max-width: 479px) 100vw, (max-width: 767px) 44vw, (max-width: 991px) 39vw, (max-width: 1919px) 23vw, 341.328125px" srcset="images/collateral-p-500.png 500w, images/collateral-p-800.png 800w, images/collateral.png 1023w" alt="" class="portfolio-image">
-        <div class="div-block-5">
-          <h2 class="h2">LOLC Collateral Module</h2>
-          <div class="para">A Collateral Management System developed using React and Java</div>
-          <div class="para mini">TypeScript / React / Ant Design / Jenkins</div>
-        </div>
-        <div class="tools-div small-div"><img src="images/mobile-app-06.webp" loading="lazy" alt="" class="tools small"><img src="images/mobile-app-07.webp" loading="lazy" alt="" class="tools small"></div>
-      </a>
-      <div style="display:none;opacity:0.4" class="case-study-popup-container">
-        <div class="service-popup">
-          <div class="header-popup">
-            <div class="spaced-in-between">
-              <h2 class="popup-title">LOLC Collateral Module</h2><img src="images/Close.svg" loading="lazy" data-w-id="0cf75faf-a32a-bbea-223b-e59b970f0abf" alt="" class="close-popup">
-            </div>
-          </div>
-          <div class="content-popup-cs">
-            <div id="Screenshots" class="content-div-cs">
-              <div class="popup-content-and-image">
-                <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
-                  <div class="w-slider-mask">
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-06.png 500w, images/LOLC-Lending-06.png 800w, images/LOLC-Lending-06.png 1080w, images/LOLC-Lending-06.png 1600w" src="images/LOLC-Lending-06.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-01.png 500w, images/LOLC-Lending-01.png 800w, images/LOLC-Lending-01.png 1080w, images/LOLC-Lending-01.png 1600w" src="images/LOLC-Lending-01.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-04.png 500w, images/LOLC-Lending-04.png 800w, images/LOLC-Lending-04.png 1080w, images/LOLC-Lending-04.png 1600w" src="images/LOLC-Lending-04.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-02.png 500w, images/LOLC-Lending-02.png 800w, images/LOLC-Lending-02.png 1080w, images/LOLC-Lending-02.png 1600w" src="images/LOLC-Lending-02.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-05.png 500w, images/LOLC-Lending-05.png 800w, images/LOLC-Lending-05.png 1080w, images/LOLC-Lending-05.png 1600w" src="images/LOLC-Lending-05.png" loading="lazy" alt="" class="slider-image"></div>
-                    <div class="slide w-slide"><img sizes="100vw" srcset="images/LOLC-Lending-07.png 500w, images/LOLC-Lending-07.png 800w, images/LOLC-Lending-07.png 1080w, images/LOLC-Lending-07.png 1600w" src="images/LOLC-Lending-07.png" loading="lazy" alt="" class="slider-image"></div>
-                  </div>
-                  <div class="left-arrow w-slider-arrow-left">
-                    <div class="w-icon-slider-left"></div>
-                  </div>
-                  <div class="right-arrow w-slider-arrow-right">
-                    <div class="w-icon-slider-right"></div>
-                  </div>
-                  <div class="slide-nav w-slider-nav w-round"></div>
-                </div>
-                <div id="Techiniques" class="content-div-cs">
-                  <div class="rte-portfolio w-richtext">
-                    <h5><strong>Category:</strong> Web Development (Front-end)</h5>
-                    <h5><strong>Client:</strong> LOLC (While at CabbageApps)</h5>
-                    <h5><strong>Role:</strong> Software Engineer / Team Lead</h5>
-                    <p><strong>Responsibilities &amp; Achievements</strong></p>
-                    <ul role="list">
-                      <li>Worked as a Front-end Team Lead with 3 other team members</li>
-                      <li>Research and development of Core banking modules</li>
-                      <li>Code review and maintain clean architecture</li>
-                    </ul>
-                  </div>
-                  <div class="tools-div on-popup"><img src="images/typescript.svg" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-10.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-01.webp" loading="lazy" alt="" class="tools on-popup"><img src="images/Web-app-Dev-05.webp" loading="lazy" alt="" class="tools on-popup"></div>
-<!--                  <a href="#" class="view-project">view Project link</a>-->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div><img src="images/Testimonials-Cloud-1.webp" loading="lazy" sizes="(max-width: 1010px) 100vw, 1010px" srcset="images/Testimonials-Cloud-1-p-500.png 500w, images/Testimonials-Cloud-1-p-800.png 800w, images/Testimonials-Cloud-1.webp 1010w" alt="" class="cloud-9">
+    <img src="images/Testimonials-Cloud-1.webp" loading="lazy" sizes="(max-width: 1010px) 100vw, 1010px" srcset="images/Testimonials-Cloud-1-p-500.png 500w, images/Testimonials-Cloud-1-p-800.png 800w, images/Testimonials-Cloud-1.webp 1010w" alt="" class="cloud-9">
   </div>
   <div id="contact" class="cta-section wf-section">
     <div class="cta"><img src="images/Astronaut-02.svg" loading="lazy" data-w-id="dc663413-54aa-66cd-f772-7b399535dbe8" alt="" class="moon-astronaut">

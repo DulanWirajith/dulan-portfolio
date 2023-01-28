@@ -2090,8 +2090,10 @@ ul {
 }
 
 .case-study-div {
-  width: 100%;
-  height: 100%;
+  width: 28%;
+  height: auto;
+  padding-right: 20px;
+  padding-bottom: 20px;
 }
 
 .div-block-5 {
@@ -3157,6 +3159,12 @@ ul {
 @media screen and (max-width: 479px) {
   ul {
     padding-left: 20px;
+  }
+
+  .case-study-div {
+    width: 95%;
+    height: auto;
+    margin: auto;
   }
 
   .planet {
