@@ -187,7 +187,7 @@ ul {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  background-image: url('../images/Home-Page.png');
+  background-image: url('../images/Home-Page.webp');
   background-position: 50% 56%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -2091,6 +2091,7 @@ ul {
 
 .case-study-div {
   width: 28%;
+  min-width: 28% !important;
   height: auto;
   padding-right: 20px;
   padding-bottom: 20px;
