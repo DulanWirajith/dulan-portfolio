@@ -3167,11 +3167,11 @@ ul {
     padding-left: 20px;
   }
 
-  /*.case-study-div {*/
-  /*  width: 95%;*/
-  /*  height: auto;*/
-  /*  margin: auto;*/
-  /*}*/
+  .case-study-div {
+    width: 95%;
+    height: auto;
+    margin: auto;
+  }
 
   .planet {
     left: auto;
